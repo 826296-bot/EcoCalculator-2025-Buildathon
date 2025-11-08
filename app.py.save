@@ -1,0 +1,37 @@
+import streamlit as st
+import pandas as pd
+
+st.set_page_config(page_title="EcoCalculator", page_icon="🔋", layout="centered")
+st.title("🔋 EcoCalculator: Your Daily Energy Impact Calculator")
+st.write("Estimate your daily power usage and CO₂ footprint! 🌱")
+
+st.header("⚙️ Daily Usage")
+computer_hours = st.slide("💻 Computer usage (hours/day)", 0, 12, 4)
+light_bulbs = st.number_input("💡 Number of light bulbs used", 0, 10, 3)
+ac_hours = st.slider("❄️ Air conditioner usage (hours/day)", 0, 12, 2)
+
+computer_energy = 0.1 * computer_hours
+lights_energy = 0.06 * light_bulbs * 4
+ac_energy = 1.0 * ac_hours
+total_kwh = computer_energy + lights_energy + ac_energy
+co2_kg = total_kwh * 0.42
+
+st.header("📊 Your Results")
+st.metric("⚡ Total Energy", f"{total_kwh:.2f} kWh/day")
+st.metric("🌍 CO₂ Emissions", f"{co2_kg:.2f} kg/day")
+
+energy_data = pd.DataFrame({
+    "Device": ["Computer", "Lights", "AC"],
+    "kWh": [computer_energy, lights_energy, ac_energy]
+})
+st.bar_chart(energy_data.set_index("Device"))
+
+if co2_kg < 1.5:
+    st.success("Great job! You're very energy-efficient 🌿")
+elif co2_kg < 3:
+    st.warning("Not bad! You could save more with LED bulbs 💡")
+else:
+    st.error("High usage ⚠️ Try turning off devices when not in use!")
+
+st.caption("Made with ❤️ using Streamlit | Hackathon 2025 Entry")
+
