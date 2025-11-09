@@ -10,11 +10,12 @@ st.header("⚙️ Daily Usage")
 computer_hours = st.slider("💻 Computer usage (hours/day)", 0, 12, 4)
 light_bulbs = st.number_input("💡 Number of light bulbs used", 0, 10, 3)
 ac_hours = st.slider("❄️ Air conditioner usage (hours/day)", 0, 12, 2)
-
+car_minutes = st.slider("🚗Time driving in gas car (mins/day)",0, 200, 50) 
 computer_energy = 0.1 * computer_hours
 lights_energy = 0.06 * light_bulbs * 4
 ac_energy = 1.0 * ac_hours
-total_daily_kwh = computer_energy + lights_energy + ac_energy
+car_energy = 0.1 * car_minutes
+total_daily_kwh = computer_energy + lights_energy + ac_energy + car_energy
 daily_co2_kg = total_daily_kwh * 0.42
 
 st.header("📊 Your Daily Results")
@@ -22,17 +23,17 @@ st.metric("⚡ Total Energy", f"{total_daily_kwh:.2f} kWh/day")
 st.metric("🌍 CO₂ Emissions", f"{daily_co2_kg:.2f} kg/day")
 
 energy_data = pd.DataFrame({
-    "Device": ["Computer", "Lights", "AC"],
-    "kWh": [computer_energy, lights_energy, ac_energy]
+    "Device": ["Computer", "Lights", "AC", "Car"],
+    "kWh": [computer_energy, lights_energy, ac_energy, car_energy]
 })
 st.bar_chart(energy_data.set_index("Device"))
 
-if daily_co2_kg < 1.5:
+if daily_co2_kg < 2.5:
     st.success("Great job! You're very energy-efficient 🌿")
-elif daily_co2_kg < 3:
+elif daily_co2_kg < 5:
     st.warning("Not bad! You could save more with LED bulbs 💡")
 else:
-    st.error("High usage ⚠️ Try turning off devices when not in use!")
+    st.error("High usage ⚠️ Try turning off devices when not in use! Also consider buying an electric car.")
 
 st.subheader("🌍 Compare Monthly CO₂ with Your Region")
 monthly_kwh = total_daily_kwh * 30

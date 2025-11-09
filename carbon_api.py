@@ -1,6 +1,6 @@
 import requests
 import streamlit as st
-
+import os
 API_KEY = "Klh7ZZpwQYHhEOmG7Hd2"
 BASE_URL = "https://api.electricitymaps.com/v3"
 
